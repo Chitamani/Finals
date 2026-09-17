@@ -206,6 +206,124 @@
       box-shadow: var(--shadow);
     }
 
+    .video-card {
+      width: min(100%, 310px);
+      margin-top: 28px;
+      overflow: hidden;
+      border: 4px solid white;
+      border-radius: 16px;
+      background: var(--dark);
+      box-shadow: 0 14px 30px rgba(24, 37, 30, .22);
+    }
+
+    .video-frame {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      background: #0f2419;
+    }
+
+    .video-frame video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .video-thumbnail {
+      position: absolute;
+      inset: 6px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 0 10px 10px;
+      overflow: hidden;
+      border: 0;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #164b35;
+      box-shadow: 0 0 0 3px #ff4d6d, 0 0 0 6px #ffd166, 0 0 0 9px #06d6a0;
+      animation: rgbThumbnail 3s linear infinite;
+    }
+
+    .video-thumbnail img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      padding: 8px;
+      object-fit: contain;
+      object-position: center;
+      background: #f2f8ec;
+      opacity: .96;
+    }
+
+    .video-thumbnail::after {
+      position: absolute;
+      inset: 0;
+      content: "";
+      background: #164b3566;
+    }
+
+    .video-thumbnail-label {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 11px;
+      border-radius: 999px;
+      color: white;
+      background: var(--orange);
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .video-thumbnail.is-hidden {
+      display: none;
+    }
+
+    @keyframes rgbThumbnail {
+      0% { box-shadow: 0 0 0 3px #ff4d6d, 0 0 0 6px #ffd166, 0 0 0 9px #06d6a0; }
+      33% { box-shadow: 0 0 0 3px #06d6a0, 0 0 0 6px #118ab2, 0 0 0 9px #ff4d6d; }
+      66% { box-shadow: 0 0 0 3px #ffd166, 0 0 0 6px #ff4d6d, 0 0 0 9px #118ab2; }
+      100% { box-shadow: 0 0 0 3px #ff4d6d, 0 0 0 6px #ffd166, 0 0 0 9px #06d6a0; }
+    }
+
+    .video-controls {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 5px;
+      padding: 7px 9px;
+      color: white;
+    }
+
+    .video-control-button {
+      display: grid;
+      place-items: center;
+      width: 25px;
+      height: 25px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      cursor: pointer;
+      color: white;
+      background: transparent;
+    }
+
+    .video-control-button:hover {
+      color: var(--orange);
+    }
+
+    .video-progress {
+      flex: 1 1 75px;
+      min-width: 55px;
+      height: 4px;
+      padding: 0;
+      accent-color: var(--orange);
+    }
+
     .fruit-bowl {
       display: block;
       width: 100%;
@@ -913,6 +1031,33 @@
           <p>
             Complete your details and send your complete cart order directly to WhatsApp.
           </p>
+          <div class="video-card" aria-label="Fresh fruit video player">
+            <div class="video-frame">
+              <video id="fruitVideo" src="abc.mp4" poster="a.png" preload="metadata"></video>
+              <button id="videoThumbnail" class="video-thumbnail" type="button" aria-label="Play fruit video" title="Play fruit video">
+                <img src="a.png" alt="Fruit video thumbnail">
+                <span class="video-thumbnail-label">
+                  <i class="fa-solid fa-play"></i>
+                  Click Me
+                </span>
+              </button>
+            </div>
+            <div class="video-controls">
+              <button id="videoBack" class="video-control-button" type="button" aria-label="Go back 10 seconds" title="Back 10 seconds">
+                <i class="fa-solid fa-rotate-left"></i>
+              </button>
+              <button id="videoForward" class="video-control-button" type="button" aria-label="Go forward 10 seconds" title="Forward 10 seconds">
+                <i class="fa-solid fa-rotate-right"></i>
+              </button>
+              <button id="videoStop" class="video-control-button" type="button" aria-label="Stop video" title="Stop video">
+                <i class="fa-solid fa-stop"></i>
+              </button>
+              <input id="videoProgress" class="video-progress" type="range" min="0" max="100" value="0" step="0.1" aria-label="Video progress">
+              <button id="videoMute" class="video-control-button" type="button" aria-label="Turn sound off" title="Turn sound off">
+                <i class="fa-solid fa-volume-high"></i>
+              </button>
+            </div>
+          </div>
         </div>
 
         <form class="order-form" id="orderForm">
@@ -1021,7 +1166,7 @@
           </div>
 
           <div class="socials">
-            <a href="https://www.instagram.com/chintamani_fruit_123/?hl=en" target="_blank" aria-label="Instagram">
+            <a href="https://instagram.com/" target="_blank" aria-label="Instagram">
               <i class="fa-brands fa-instagram"></i>
             </a>
 
@@ -1060,7 +1205,7 @@
   </footer>
 
   <script>
-    const ownerWhatsApp = "919226795690";
+    const ownerWhatsApp = "918949106245";
     let cart = [];
 
     const cartItems = document.getElementById("cartItems");
@@ -1142,6 +1287,51 @@
       button.addEventListener("click", () => {
         document.getElementById("plan").value = button.dataset.plan;
       });
+    });
+
+    const fruitVideo = document.getElementById("fruitVideo");
+    const videoThumbnail = document.getElementById("videoThumbnail");
+    const videoBack = document.getElementById("videoBack");
+    const videoForward = document.getElementById("videoForward");
+    const videoStop = document.getElementById("videoStop");
+    const videoProgress = document.getElementById("videoProgress");
+    const videoMute = document.getElementById("videoMute");
+    const videoMuteIcon = videoMute.querySelector("i");
+
+    function updateVideoThumbnail() {
+      videoThumbnail.classList.toggle("is-hidden", !fruitVideo.paused);
+    }
+
+    videoThumbnail.addEventListener("click", () => fruitVideo.play());
+    fruitVideo.addEventListener("click", () => fruitVideo.play());
+    fruitVideo.addEventListener("play", updateVideoThumbnail);
+    fruitVideo.addEventListener("pause", updateVideoThumbnail);
+    fruitVideo.addEventListener("ended", updateVideoThumbnail);
+    videoBack.addEventListener("click", () => {
+      fruitVideo.currentTime = Math.max(0, fruitVideo.currentTime - 10);
+    });
+    videoForward.addEventListener("click", () => {
+      fruitVideo.currentTime = Math.min(fruitVideo.duration || 0, fruitVideo.currentTime + 10);
+    });
+    videoStop.addEventListener("click", () => {
+      fruitVideo.pause();
+    });
+    fruitVideo.addEventListener("loadedmetadata", () => {
+      videoProgress.max = fruitVideo.duration;
+    });
+    fruitVideo.addEventListener("timeupdate", () => {
+      videoProgress.value = fruitVideo.currentTime;
+    });
+    videoProgress.addEventListener("input", event => {
+      fruitVideo.currentTime = Number(event.target.value);
+    });
+    videoMute.addEventListener("click", () => {
+      fruitVideo.muted = !fruitVideo.muted;
+      videoMuteIcon.className = fruitVideo.muted
+        ? "fa-solid fa-volume-xmark"
+        : "fa-solid fa-volume-high";
+      videoMute.setAttribute("aria-label", fruitVideo.muted ? "Turn sound on" : "Turn sound off");
+      videoMute.setAttribute("title", fruitVideo.muted ? "Turn sound on" : "Turn sound off");
     });
 
     document.getElementById("orderForm").addEventListener("submit", event => {
